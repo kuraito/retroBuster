@@ -1,0 +1,51 @@
+/* Import dei font retro - DEVE essere prima di tutto */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+/* Direttive Tailwind CSS - NON ELIMINARE!!!*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Colori custom retro più sobri */
+:root {
+  --retro-pink: #e11d48;
+  --retro-cyan: #06b6d4;
+  --retro-purple: #7c3aed;
+  --retro-orange: #ea580c;
+  --retro-yellow: #eab308;
+  --retro-dark: #1e1b4b;
+  --retro-darker: #0f0f23;
+}
+
+/* Font personalizzati */
+.font-retro {
+  font-family: 'Orbitron', monospace;
+}
+
+.font-mono-retro {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* Effetti neon più soft */
+.neon-text {
+  text-shadow: 
+    0 0 3px currentColor,
+    0 0 6px currentColor;
+}
+
+.neon-box {
+  box-shadow: 
+    0 0 3px currentColor,
+    0 0 6px currentColor;
+}
+
+/* Gradiente retro per sfondi più sobrio */
+.bg-retro-gradient {
+  background: linear-gradient(135deg, var(--retro-dark) 0%, var(--retro-darker) 50%, #1e293b 100%);
+}
+
+.bg-retro-card {
+  background: linear-gradient(145deg, rgba(124, 58, 237, 0.1) 0%, rgba(225, 29, 72, 0.1) 100%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
