@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function MovieCard({ movie, onAddToWatchlist, isInWatchlist }) {
-  // Funzione per gestire l'aggiunta alla watchlist
-  const handleAddToWatchlist = (e) => {
-    e.preventDefault(); // Previene la navigazione del link
+export default function MovieCard({ movie, onAddToWatchlist, isInWatchlist }) { //movie fa parte di movies che viene inviato come prop
+  // movie: oggetto film con dettagli (id, title, year, description, poster)
+  // onAddToWatchlist: funzione opzionale per aggiungere alla watchlist
+  // isInWatchlist: booleano opzionale per indicare se il film è già nella watchlist
+
+  // Funzione per gestire il click alla watchlist
+  const handleAddToWatchlist = (e) => { //e è l'evento del click
+    e.preventDefault(); // Previene la navigazione del link cioè non va alla pagina del film 
     if (onAddToWatchlist && !isInWatchlist) {
-      onAddToWatchlist(movie);
+      onAddToWatchlist(movie); // chiama la funzione che abbiamo inviato come prop 
+                               // (dovrebbe stare in catalogo la funzione che aggiunge alla watchlist)
     }
   };
 
@@ -39,15 +44,15 @@ export default function MovieCard({ movie, onAddToWatchlist, isInWatchlist }) {
         
         {/* Pulsanti di azione */}
         <div className="flex space-x-2">
-          {/* Pulsante Dettagli */}
-          <Link 
-            to={`/film/${movie.id}`}
+          {/* PULSANTE Dettagli quando clicko su dettagli va a */}
+          <Link //componente di React Router per navigare senza ricaricare la pagina
+            to={`/film/${movie.id}`} //link dinamico alla pagina del film
             className="flex-1 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white px-4 py-2 rounded-md text-sm font-mono-retro font-medium transition-all duration-300 text-center border border-rose-400/50"
           >
             Dettagli
           </Link>
           
-          {/* Pulsante Watchlist (se disponibile) */}
+          {/* PULSANTE Watchlist (se disponibile) */}
           {onAddToWatchlist && (
             <button
               onClick={handleAddToWatchlist}

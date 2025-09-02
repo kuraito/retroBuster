@@ -16,3 +16,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+/*
+v7_startTransition: true
+Mantiene l'interfaccia più fluida durante navigazioni lente
+Avvolge automaticamente le navigazioni in `React.startTransition()`
+
+v7_relativeSplatPath: true
+Cambia come vengono risolti i path relativi nelle route
+*/

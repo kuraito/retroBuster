@@ -5,16 +5,22 @@ export default function Login() {
     email: '',
     password: ''
   });
+  /*
+  formData contiene email e password dell'utente all'inizio sono vuoti
+  setFormData funzione che aggiorna formData
+  */
 
+  // e è l evento del submit del form
   const handleSubmit = (e) => {
-    e.preventDefault();
-    alert('Login fittizio - funzionalità non implementata');
+    e.preventDefault(); //previene il comportamento di default del form che ricarica la pagina
+    alert('Login fittizio - funzionalità non implementata'); //placeholder
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
+  //e è il campo specifico che cambia
+  const handleChange = (e) => { //gestisce i cambiamenti nei campi del form
+    setFormData({ //aggiorna 
+      ...formData, //copia lo stato attuale
+      [e.target.name]: e.target.value //aggiorna il campo specifico (email o password)
     });
   };
 
@@ -33,7 +39,7 @@ export default function Login() {
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}> {/* sul submit chiama l evento del submit del form */}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -45,8 +51,8 @@ export default function Login() {
                 type="email"
                 autoComplete="email"
                 required
-                value={formData.email}
-                onChange={handleChange}
+                value={formData.email} //valore formData che è l array dell'hook
+                onChange={handleChange} //sul cambio del campo chiama l evento del cambio del campo
                 className="relative block w-full px-3 py-2 bg-gray-800 border border-gray-700 placeholder-gray-400 text-white rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                 placeholder="Indirizzo email"
               />
@@ -68,7 +74,7 @@ export default function Login() {
               />
             </div>
           </div>
-
+          {/* altro che sta sotto i campi email e password*/}
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -91,7 +97,7 @@ export default function Login() {
 
           <div>
             <button
-              type="submit"
+              type="submit" //quando cliccato chiama l evento del submit del form
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Accedi

@@ -12,6 +12,10 @@ export default function App() {
   return (
     // Container principale dell'app con sfondo retro
     <div className="min-h-screen bg-retro-gradient">
+      {/* min-h-screen garantisce altezza minima del viewport
+      bg-retro-gradient applica il CSS custom definito in App.css
+      <Navbar /> resta sempre renderizzata */}
+      
       {/* Barra di navigazione sticky */}
       <Navbar />
       

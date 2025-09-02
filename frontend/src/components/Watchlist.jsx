@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 export default function Watchlist() {
   // Stato per memorizzare i film nella watchlist
   const [watchlist, setWatchlist] = useState([]);
+  //watchlist array di film nella watchlist, setWatchlist funzione che aggiorna watchlist
 
   // Carica la watchlist dal localStorage al primo render del componente
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function Watchlist() {
               <div className="text-purple-300 font-mono-retro text-lg">NON HAI ANCORA AGGIUNTO NESSUN FILM ALLA TUA LISTA</div>
             </div>
             
-            {/* Pulsante per andare al catalogo */}
+            {/* PULSANTE per andare al catalogo */}
             <Link 
               to="/catalogo" 
               className="inline-block bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-8 py-4 rounded-md font-retro font-bold transition-all duration-300 border-2 border-pink-400 neon-box transform hover:scale-105"
@@ -95,7 +96,7 @@ export default function Watchlist() {
                   {movie.description}
                 </p>
                 
-                {/* Pulsanti di azione */}
+                {/* PULSANTI di azione */}
                 <div className="flex space-x-2">
                   {/* Pulsante per vedere i dettagli */}
                   <Link 
@@ -106,7 +107,7 @@ export default function Watchlist() {
                   </Link>
                   
                   {/* Pulsante per rimuovere dalla watchlist */}
-                  <button
+                  <button 
                     onClick={() => removeFromWatchlist(movie.id)}
                     className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-md text-sm font-mono-retro font-bold transition-all duration-300 border border-red-400 hover:border-yellow-400 neon-box"
                   >

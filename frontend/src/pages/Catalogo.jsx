@@ -5,37 +5,58 @@ import MovieCard from "../components/MovieCard";
 export default function Catalogo() {
   // Stati per la gestione dei film e dei filtri
   const [movies, setMovies] = useState(mockMovies); // Film filtrati da mostrare
+  //movies array di film a inizio pagina catalogo, setMovies funzione per aggiornarlo
+  
   const [searchTerm, setSearchTerm] = useState(""); // Termine di ricerca
-  const [selectedYear, setSelectedYear] = useState(""); // Anno selezionato per il filtro
-  const [watchlist, setWatchlist] = useState([]); // Watchlist dell'utente
+  //searchTerm stringa per il filtro di ricerca, setSearchTerm funzione che aggiorna searchTerm
 
-  // Carica la watchlist dal localStorage al primo render
+  /*// ESEMPIO PRATICO DELL'HOOK:
+
+      All'inizio
+      searchTerm = ""; // Niente scritto
+
+      // Utente scrive "ma"
+      setSearchTerm("ma"); // searchTerm = "ma"
+
+      // Utente scrive "matrix"
+      setSearchTerm("matrix"); // searchTerm = "matrix" */
+
+  const [selectedYear, setSelectedYear] = useState(""); // Anno selezionato per il filtro
+  //selectedYear stringa per il filtro anno, setSelectedYear funzione che aggiorna selectedYear
+
+  const [watchlist, setWatchlist] = useState([]); // Watchlist dell'utente
+  //watchlist array di film nella watchlist, setWatchlist funzione che aggiorna watchlist
+
+  // Si usa quando la pagina si carica legge nel localStorage se ci sono film salvati nel browser se li trova li carica
   useEffect(() => {
     const savedWatchlist = JSON.parse(localStorage.getItem('retroflix-watchlist') || '[]');
     setWatchlist(savedWatchlist);
   }, []);
 
-  // Filtra i film quando cambiano i parametri di ricerca
+  // FILTRA i film quando cambiano i parametri di ricerca
+  // AGGIORNA LA LISTA DEI FILM OGNI VOLTA CHE CAMBIA LA RICERCA O L ANNO DALLA BARRA DI RICERCA
   useEffect(() => {
     let filtered = mockMovies;
 
-    // Filtro per titolo (ricerca testuale)
+    // SI ATTIVA QUANDO SEATCHTERM SI MODIFICA
     if (searchTerm) {
       filtered = filtered.filter(movie =>
-        movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase()) //FILTRA
       );
     }
 
-    // Filtro per anno
+    // SI ATTIVA QUANDO SELECTEDYEAR SI MODIFICA
     if (selectedYear) {
-      filtered = filtered.filter(movie => movie.year.toString() === selectedYear);
+      filtered = filtered.filter(movie => movie.year.toString() === selectedYear); //FILTRA
     }
 
-    setMovies(filtered);
-  }, [searchTerm, selectedYear]);
+    setMovies(filtered); //AGGIORNA LO STATO DEI FILM
+  }, [searchTerm, selectedYear]); //ogni volta che cambia searchTerm o selectedYear si attiva questa funzione (dipendenze dell'USEEFFECT)
 
   // Funzione per aggiungere un film alla watchlist
+  //QUANDO SI CLICKA IL BOTTONE
   const addToWatchlist = (movie) => {
+    console.log(movie)
     if (!watchlist.some(m => m.id === movie.id)) {
       const newWatchlist = [...watchlist, movie];
       setWatchlist(newWatchlist);
@@ -44,6 +65,7 @@ export default function Catalogo() {
   };
 
   // Funzione per controllare se un film è già nella watchlist
+  //SEMPRE QUANDO DI CLICKA IL BOTTONE
   const isInWatchlist = (movieId) => {
     return watchlist.some(m => m.id === movieId);
   };
@@ -62,24 +84,25 @@ export default function Catalogo() {
         
         {/* Sezione ricerca e filtri */}
         <div className="mb-8 flex flex-col md:flex-row gap-4">
-          {/* Campo di ricerca */}
+          {/* Campo di RICERCA */}
           <div className="flex-1">
             <input
               type="text"
               placeholder="CERCA FILM PER TITOLO..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)} //CAMBIA QUINDI IL SEARCHTERM HOOK QAUNDO RICERCA
               className="w-full px-4 py-3 bg-purple-900/50 text-cyan-300 rounded-md border-2 border-pink-500/50 focus:border-cyan-400 focus:outline-none font-mono-retro placeholder-purple-300 neon-box"
             />
           </div>
           
-          {/* Filtro per anno */}
+          {/* RICERCA - Filtro per anno */}
           <div className="md:w-48">
             <select
               value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
+              onChange={(e) => setSelectedYear(e.target.value)} //CAMBIA QUINDI IL SELECTEDYEAR HOOK QUANDO RICERCA
               className="w-full px-4 py-3 bg-purple-900/50 text-cyan-300 rounded-md border-2 border-pink-500/50 focus:border-cyan-400 focus:outline-none font-mono-retro neon-box"
             >
+              {/* ESCONO TUTTI GLI ANNI IN LISTA */}
               <option value="">TUTTI GLI ANNI</option>
               {years.map(year => (
                 <option key={year} value={year} className="bg-purple-900 text-cyan-300">
@@ -99,19 +122,19 @@ export default function Catalogo() {
 
         {/* Griglia dei film o messaggio di nessun risultato */}
         {movies.length === 0 ? (
-          // Messaggio quando non ci sono risultati
+          // Messaggio QUANDO NON CI SONO RISULTATI
           <div className="text-center py-16">
             <div className="text-cyan-400 text-2xl font-retro neon-text">NESSUN FILM TROVATO</div>
             <div className="text-purple-300 font-mono-retro mt-4">PROVA A MODIFICARE I FILTRI DI RICERCA</div>
           </div>
         ) : (
-          // Griglia dei film trovati
+          // Griglia dei FILM TROVATI DALLA RICERCA
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {movies.map(movie => (
               <MovieCard 
                 key={movie.id} 
                 movie={movie} 
-                onAddToWatchlist={addToWatchlist}
+                onAddToWatchlist={addToWatchlist} //PASSA LA FUNZIONE DEL BOTTONE AL COMPONENTE MOVIECARD 
                 isInWatchlist={isInWatchlist(movie.id)}
               />
             ))}

@@ -4,12 +4,15 @@ import { mockMovies } from "../mockMovies";
 import MovieCard from "../components/MovieCard";
 
 export default function Home() {
-  // Seleziona i primi 3 film per la sezione in evidenza
+
+  // Seleziona i primi 3 film per la sezione in evidenza per metterli nella home
   const featuredMovies = mockMovies.slice(0, 3);
 
   return (
-    // Container principale con sfondo retro più sobrio
+    // Container principale con sfondo retro
     <div className="min-h-screen bg-retro-gradient">
+      {/* struttura della pagina in più sezioni */}
+
       {/* Sezione Hero con design più pulito */}
       <section className="relative bg-gradient-to-br from-purple-800 via-blue-900 to-purple-800 py-20 overflow-hidden">
         {/* Elementi decorativi di sfondo più soft */}
@@ -36,9 +39,9 @@ export default function Home() {
             Scopri, colleziona e rivivi i capolavori cinematografici fino al 2010
           </p>
           
-          {/* Pulsanti di azione con stile più sobrio */}
+          {/* Pulsanti di azione con stile*/}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            {/* Pulsante Esplora Catalogo */}
+            {/* PULSANTE Esplora Catalogo */}
             <Link 
               to="/catalogo"
               className="bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white px-8 py-3 rounded-md text-lg font-retro font-medium transition-all duration-300 transform hover:scale-105 border border-rose-400/50"
@@ -46,7 +49,7 @@ export default function Home() {
               Esplora Catalogo
             </Link>
             
-            {/* Pulsante Watchlist */}
+            {/* PULSANTE Watchlist */}
             <Link 
               to="/watchlist"
               className="bg-transparent border border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-purple-900 px-8 py-3 rounded-md text-lg font-retro font-medium transition-all duration-300 transform hover:scale-105"
@@ -91,7 +94,7 @@ export default function Home() {
             {/* Caratteristica 1: Film Classici */}
             <div className="p-6 bg-retro-card rounded-lg border border-cyan-400/30 hover:border-rose-400/50 transition-all duration-300 transform hover:scale-105">
               <div className="text-5xl mb-4 text-cyan-400">🎬</div>
-              <h3 className="text-xl font-retro font-bold text-rose-400 mb-2">Film Classici</h3>
+              <h3 className="text-xl font-retro font-bold text-rose-400 mb-2">Film</h3>
               <p className="text-purple-200 font-mono-retro">Una selezione curata dei migliori film fino al 2010</p>
             </div>
             

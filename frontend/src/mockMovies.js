@@ -1,3 +1,5 @@
+/* simula un api quindi dei dati */
+
 export const mockMovies = [
   {
     id: 1,
@@ -57,30 +59,16 @@ export const mockMovies = [
   },
   {
     id: 9,
-    title: "Die Hard",
-    year: 1988,
-    poster: "https://m.media-amazon.com/images/M/MV5BZjRlNDUxZjAtOGQ4OC00OTNlLTgwNWMtYTBmNjUzZTU0MjJiXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
-    description: "Un poliziotto di New York deve salvare sua moglie e altri ostaggi da terroristi in un grattacielo di Los Angeles."
-  },
-  {
-    id: 10,
     title: "Top Gun",
     year: 1986,
     poster: "https://m.media-amazon.com/images/M/MV5BZjQxYTA3ODItNzgxMy00N2Y2LWJlZGMtMTRlM2JkZjI1ZDhhXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_SX300.jpg",
     description: "Un giovane pilota di caccia navale compete con i migliori piloti nella scuola di volo d'élite della Marina."
   },
   {
-    id: 11,
+    id: 10,
     title: "Forrest Gump",
     year: 1994,
     poster: "https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
     description: "Le straordinarie avventure di un uomo dal cuore puro attraverso alcuni dei momenti più significativi del 20° secolo."
-  },
-  {
-    id: 12,
-    title: "The Princess Bride",
-    year: 1987,
-    poster: "https://m.media-amazon.com/images/M/MV5BMGM4M2Q5N2MtNThkZS00NTc1LTk1NTItNWEyZjJlMjBhZDEyXkEyXkFqcGdeQXVyMjA0MDQ0Mjc@._V1_SX300.jpg",
-    description: "Una storia di avventura e amore vero raccontata da un nonno al nipote malato."
   }
 ];
