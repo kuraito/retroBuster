@@ -1,19 +1,25 @@
 
+/* 
+contiene tutte le api rest per gestire i film nel database mongoDB e il ponte fra frontend e backend
+*/
+
 // Importa Express per gestire le rotte
 const express = require("express");
+
 // Crea un router per le rotte dei film
 const router = express.Router();
+
 // Importa il modello Movie per interagire con i dati dei film
 const Movie = require("../models/Movie");
 
 
-// Rotta per ottenere la lista di tutti i film
-router.get("/", async (req, res) => {
+// Per ottenere la lista di tutti i film
+router.get("/", async (req, res) => { //chiamata get alla radice della rotta /movies
   try {
     const movies = await Movie.find(); // Recupera tutti i film dal database
     res.json(movies); // Restituisce la lista dei film in formato JSON
   } catch (err) {
-    res.status(500).json({ error: err.message }); // Gestione errori
+    res.status(500).json({ error: err.message }); // Nel caso di ERRORE
   }
 });
 

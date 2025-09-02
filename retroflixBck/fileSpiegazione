@@ -1,0 +1,7 @@
+1. 📦 **package.json** ← INIZIA QUI
+2. 🚀 **server.js/app.js** (entry point)
+3. 🗃️ **/models/** (schemi MongoDB)
+4. 🛣️ **/routes/** (API endpoints)
+5. 🔐 **/middleware/** (autenticazione, CORS)
+6. ⚙️ **/config/** (configurazione DB)
+7. 🌍 **.env** (variabili ambiente)
