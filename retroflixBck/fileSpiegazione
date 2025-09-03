@@ -5,3 +5,18 @@
 5. 🔐 **/middleware/** (autenticazione, CORS)
 6. ⚙️ **/config/** (configurazione DB)
 7. 🌍 **.env** (variabili ambiente)
+
+
+server.js
+È il punto di ingresso
+
+routes/
+Contiene le definizioni delle rotte
+Serve a separare la logica di instradamento
+
+models/
+Definisce le strutture dei dati
+
+config/
+Contiene file di configurazione
+es. connessione al database, variabili d’ambiente, impostazioni JWT.
