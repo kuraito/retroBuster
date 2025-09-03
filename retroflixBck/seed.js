@@ -33,3 +33,28 @@ async function seed() {
 }
 
 seed();
+
+/**
+ * serve per popolare il database.
+ * Dotenv prende le variabili d'ambiente
+ * mongoose, connessione diretta a mongodb
+ * Movie, modello dei film
+ * 
+ * Poi c'è la funzione di Seeding
+ * Si collega direttamente a MongoDB usando l'URI
+ * con    await mongoose.connect(process.env.MONGO_URI);
+ * 
+ * movies sono i film di esempio
+ * 
+ * Pulisce la collezione esistente con Movie.deleteMany();
+ * 
+ * Inserisce i film con Movie.insertMany(movies);
+ *
+ * poi con result.forEach(movie => console.log(`- ${movie.title} (${movie.year})`));
+ * stampa i film inseriti
+ * 
+ * process.exit() termina il processo
+ * 
+ * seed() avvia la funzione di seeding
+ *  
+ * */
