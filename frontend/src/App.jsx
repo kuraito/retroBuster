@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -9,6 +8,8 @@ import WatchlistPage from "./pages/WatchlistPage";
 import Login from "./pages/Login";
 
 export default function App() {
+  console.log("App rendering, current path:", window.location.pathname);
+
   return (
     // Container principale dell'app con sfondo retro
     <div className="min-h-screen bg-retro-gradient">
