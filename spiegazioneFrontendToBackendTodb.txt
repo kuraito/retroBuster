@@ -1,0 +1,99 @@
+🖥️ FRONTEND (React)    📡 BACKEND (Node.js)    🗄️ DATABASE (MongoDB)
+Port 5173        ←→    Port 3001         ←→    MongoDB Atlas
+
+FRONTEND (REACT):
+chiamata api del frontend in api.js nella cartella services:
+
+gli dico prima qual è l'indirizzo del backend (scritto in un file .env)
+
+quindi faccio una chiamata a URLBACKEND/movies e aspettiamo la risposta
+      const response = await fetch(`${BACKEND_URL}/movies`);
+
+Stessa cosa per i primi tre film facciamo una chiamata a: 
+      const response = await fetch(`${BACKEND_URL}/movies/featured`);
+
+In un'altra funzione di api.js
+
+REACT USA I DATI: in catalogo.jsx
+	const [movies, setMovies] = useState([]);
+
+	useEffect(() => {
+  		const loadMovies = async () => {
+    			// 🔄 Chiama il servizio API
+    			const filmsFromBackend = await movieService.getAllMovies();
+    			setMovies(filmsFromBackend); // ← Aggiorna lo stato di React
+  		};
+  		loadMovies();
+	}, []);
+
+
+BACKEND:
+In server.js ricevere la chiammata 
+Delega a: 
+	app.use("/api/movies", moviesRoutes); // ← Delega a movies.js
+Poichè sopra l'abbiamo definito: 
+	const moviesRoutes = require("./routes/movies"); // Le rotte per gestire i film
+
+In server.js configuriamo CORS che ci permette di comunicare frontend <-> backend
+
+	app.use(cors({
+  		origin: 'http://localhost:5173', // ← Frontend autorizzato
+  		credentials: true
+	}));
+
+Quindi backend -> database 
+movies.js si occupa di ciò
+
+// 🗄️ Importa il modello per il database dalla cartella models Movie.js
+const Movie = require("../models/Movie");
+
+// 📋 API: OTTIENI TUTTI I FILM
+router.get("/", async (req, res) => {
+  try {
+    console.log('📡 RICHIESTA RICEVUTA: Tutti i film');
+    console.log('🗄️ Caricamento film dal database...');
+
+    const filmsFromDatabase = await Movie.find({});
+    
+    console.log(`✅ FILM CARICATI DAL DB: ${filmsFromDatabase.length} film trovati`);
+    
+    // 📤 Invia i film veri dal database al frontend
+    res.json(filmsFromDatabase);
+    
+  } catch (error) {
+    console.error('❌ ERRORE nella rotta /movies:', error);
+    res.status(500).json({ 
+      error: 'Errore nel caricamento dei film',
+      details: error.message 
+    });
+  }
+});
+
+Sempre in server.js invece ci colleghiamo al database
+	await mongoose.connect(process.env.MONGO_URI);
+
+
+
+🔄 FLUSSO COMPLETO DI UNA RICHIESTA
+Quando l'utente apre il catalogo:
+👤 USER: Clicca su "Catalogo" → React carica Catalogo.jsx
+
+⚛️ REACT: useEffect chiama movieService.getAllMovies()
+
+📡 FETCH: GET http://localhost:3001/api/movies
+
+🚪 CORS: Backend verifica: "Chiamata da localhost:5173? ✅ Autorizzata"
+
+🛣️ EXPRESS: Server instrada verso movies.js
+
+🗄️ MONGODB: const films = await Movie.find({});
+
+📊 DATABASE: MongoDB Atlas restituisce 9 film
+
+📤 BACKEND: res.json(filmsFromDatabase);
+
+📨 RESPONSE: JSON con 9 film viaggia verso il frontend
+
+⚛️ REACT: setMovies(filmsFromBackend);
+
+🖥️ UI: I 9 film appaiono nella griglia del catalogo

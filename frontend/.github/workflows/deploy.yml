@@ -1,4 +1,4 @@
-name: Deploy Frontend to GitHub Pages
+name: Build and Deploy Frontend
 
 on:
   push:
@@ -6,32 +6,33 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout del repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
-        working-directory: frontend
         run: npm install
+        working-directory: ./frontend
 
-      - name: Build project
-        working-directory: frontend
+      # 4️⃣ Build
+      - name: Build frontend
         run: npm run build
+        working-directory: ./frontend
 
-      - name: Disable Jekyll
-        run: touch frontend/dist/.nojekyll
-
+      # 5️⃣ Deploy su GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v7
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: frontend/dist
-          publish_branch: gh-pages
+          publish_dir: ./frontend/dist

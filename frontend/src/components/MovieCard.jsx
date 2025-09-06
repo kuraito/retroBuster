@@ -46,7 +46,7 @@ export default function MovieCard({ movie, onAddToWatchlist, isInWatchlist }) { 
         <div className="flex space-x-2">
           {/* PULSANTE Dettagli quando clicko su dettagli va a */}
           <Link //componente di React Router per navigare senza ricaricare la pagina
-            to={`/film/${movie.id}`} //link dinamico alla pagina del film
+            to={`/film/${movie._id || movie.id}`} // ✅ Usa _id dal database o id come fallback
             className="flex-1 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white px-4 py-2 rounded-md text-sm font-mono-retro font-medium transition-all duration-300 text-center border border-rose-400/50"
           >
             Dettagli

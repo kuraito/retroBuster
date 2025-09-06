@@ -132,10 +132,10 @@ export default function Catalogo() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {movies.map(movie => (
               <MovieCard 
-                key={movie.id} 
+                key={movie._id || movie.id} // ✅ Usa _id dal database o id come fallback
                 movie={movie} 
                 onAddToWatchlist={addToWatchlist} //PASSA LA FUNZIONE DEL BOTTONE AL COMPONENTE MOVIECARD 
-                isInWatchlist={isInWatchlist(movie.id)}
+                isInWatchlist={isInWatchlist(movie._id || movie.id)} // ✅ Aggiornato anche qui
               />
             ))}
           </div>

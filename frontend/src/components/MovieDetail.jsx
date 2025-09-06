@@ -1,44 +1,131 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { mockMovies } from "../mockMovies";
+import { movieService } from "../services/api"; // ✅ Importa il servizio API
+import { mockMovies } from "../mockMovies"; // 🔧 Mantieni come fallback
 
 export default function MovieDetail() {
-  const { id } = useParams(); //prende l'id dalla url
-  const [movie, setMovie] = useState(null); // stato per il film corrente
-  const [watchlist, setWatchlist] = useState([]); // stato per la watchlist
+  const { id } = useParams(); // Prende l'ID dalla URL
+  const [movie, setMovie] = useState(null); // Stato per il film corrente
+  const [loading, setLoading] = useState(true); // Stato di caricamento
+  const [error, setError] = useState(null); // Stato per errori
+  const [watchlist, setWatchlist] = useState([]); // Stato per la watchlist
 
-  useEffect(() => { //quando il componente si inizializza o cambia l'id
-    const foundMovie = mockMovies.find(m => m.id === parseInt(id)); //trova il film con l'id giusto
-    setMovie(foundMovie); //aggiorna lo stato del film corrente
+  useEffect(() => {
+    const loadMovie = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        console.log(`🔍 Caricamento film con ID: ${id}`);
+        
+        // 🎯 STRATEGIA 1: Prova a caricare dal backend
+        try {
+          const movieFromAPI = await movieService.getMovieById(id);
+          setMovie(movieFromAPI);
+          console.log('✅ Film caricato dal backend:', movieFromAPI.title);
+          
+        } catch (apiError) {
+          console.log('⚠️ Backend fallito, uso dati locali...');
+          // 🔧 STRATEGIA 2: Fallback ai dati locali
+          const foundMovie = mockMovies.find(m => m.id === parseInt(id));
+          if (foundMovie) {
+            setMovie(foundMovie);
+            console.log('🔧 Film trovato nei dati locali:', foundMovie.title);
+          } else {
+            throw new Error('Film non trovato');
+          }
+        }
+        
+      } catch (completeError) {
+        console.error('❌ Errore nel caricamento del film:', completeError);
+        setError('Film non trovato o errore nel caricamento');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      loadMovie();
+    }
     
-    const savedWatchlist = JSON.parse(localStorage.getItem('retroflix-watchlist') || '[]'); //carica la watchlist dal localStorage
-    setWatchlist(savedWatchlist); //aggiorna lo stato della watchlist
-  }, [id]); //si attiva quando cambia l'id
+    // Carica watchlist dal localStorage
+    const savedWatchlist = JSON.parse(localStorage.getItem('retroflix-watchlist') || '[]');
+    setWatchlist(savedWatchlist);
+    
+  }, [id]); // Si attiva quando cambia l'ID
 
-  const isInWatchlist = movie && watchlist.some(m => m.id === movie.id); //controlla se il film è già nella watchlist
+  // 🔍 FUNZIONI PER GESTIRE LA WATCHLIST
+  const movieId = movie?._id || movie?.id; // Usa _id dal database o id come fallback
+  const isInWatchlist = movie && watchlist.some(m => (m._id || m.id) === movieId);
 
-  const addToWatchlist = () => { //aggiunge alla watchlist
-    if (movie && !isInWatchlist) { //se il film esiste e non è già nella watchlist
-      const newWatchlist = [...watchlist, movie]; //aggiunge il film alla watchlist
-      setWatchlist(newWatchlist); // aggiorna lo stato della watchlist
-      localStorage.setItem('retroflix-watchlist', JSON.stringify(newWatchlist)); //salva la watchlist nel localStorage
+  const addToWatchlist = () => {
+    if (movie && !isInWatchlist) {
+      const newWatchlist = [...watchlist, movie];
+      setWatchlist(newWatchlist);
+      localStorage.setItem('retroflix-watchlist', JSON.stringify(newWatchlist));
+      console.log('➕ Film aggiunto alla watchlist:', movie.title);
     }
   };
 
-  const removeFromWatchlist = () => { //rimuove dalla watchlist
-    if (movie && isInWatchlist) { //se il film esiste e è già nella watchlist
-      const newWatchlist = watchlist.filter(m => m.id !== movie.id); //rimuove il film dalla watchlist
-      // rimuove il film con id uguale a movie.id 
-      //m ogni film nella watchlist m.id è l'id del film e movie.id è l'id del film corrente
-      setWatchlist(newWatchlist); // aggiorna lo stato della watchlist
-      localStorage.setItem('retroflix-watchlist', JSON.stringify(newWatchlist)); //salva la watchlist nel localStorage
+  const removeFromWatchlist = () => {
+    if (movie && isInWatchlist) {
+      const newWatchlist = watchlist.filter(m => (m._id || m.id) !== movieId);
+      setWatchlist(newWatchlist);
+      localStorage.setItem('retroflix-watchlist', JSON.stringify(newWatchlist));
+      console.log('➖ Film rimosso dalla watchlist:', movie.title);
     }
   };
 
-  if (!movie) { //se il film non esiste
-    return ( //mostra messaggio di errore
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white text-xl">Film non trovato</div>
+  // 🔄 GESTIONE STATI DI CARICAMENTO
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-retro-gradient flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-cyan-400 text-2xl font-retro neon-text mb-4">
+            CARICAMENTO FILM...
+          </div>
+          <div className="animate-spin w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-retro-gradient flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-400 text-2xl font-retro neon-text mb-4">
+            ❌ ERRORE
+          </div>
+          <div className="text-purple-300 font-mono-retro mb-6">
+            {error}
+          </div>
+          <Link 
+            to="/catalogo"
+            className="inline-block bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-700 hover:to-rose-700 text-white px-6 py-3 rounded-md font-retro font-medium transition-all duration-300"
+          >
+            ← TORNA AL CATALOGO
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ❌ Se il film non esiste dopo il caricamento
+  if (!movie) {
+    return (
+      <div className="min-h-screen bg-retro-gradient flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-purple-300 text-2xl font-retro neon-text mb-4">
+            FILM NON TROVATO
+          </div>
+          <Link 
+            to="/catalogo"
+            className="inline-block bg-gradient-to-r from-purple-600 to-rose-600 hover:from-purple-700 hover:to-rose-700 text-white px-6 py-3 rounded-md font-retro font-medium transition-all duration-300"
+          >
+            ← TORNA AL CATALOGO
+          </Link>
+        </div>
       </div>
     );
   }

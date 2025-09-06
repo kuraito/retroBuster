@@ -1,12 +1,72 @@
-import React from "react";
+// ===========================================
+// 🏠 HOMEPAGE DI RETROFLIX
+// ===========================================
+
+/*
+🎯 SCOPO: Pagina principale dell'app, mostra i film in evidenza
+📍 PERCORSO: http://localhost:5174/ (homepage)
+🔄 FLUSSO: Carica film dal backend, se fallisce usa dati di backup
+*/
+
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { mockMovies } from "../mockMovies";
-import MovieCard from "../components/MovieCard";
+import { movieService } from "../services/api";        // Servizio per chiamare il backend
+import { mockMovies } from "../mockMovies";            // Dati di backup se il backend non funziona
+import MovieCard from "../components/MovieCard";       // Componente per mostrare un singolo film
 
 export default function Home() {
+  // 📊 STATI DEL COMPONENTE (memorizzano informazioni dinamiche)
+  const [featuredMovies, setFeaturedMovies] = useState([]);  // Lista film in evidenza
+  const [loading, setLoading] = useState(true);              // Sta caricando i dati?
+  const [error, setError] = useState(null);                  // C'è un errore?
 
-  // Seleziona i primi 3 film per la sezione in evidenza per metterli nella home
-  const featuredMovies = mockMovies.slice(0, 3);
+  // 🔄 EFFETTO: Si esegue quando il componente si monta (appare)
+  useEffect(() => {
+    
+    // 📡 FUNZIONE: Carica i film dal backend
+    const caricaFilmInEvidenza = async () => {
+      try {
+        console.log('🔄 AVVIO: Caricamento film in evidenza...');
+        setLoading(true);  // Inizia il caricamento
+        setError(null);    // Resetta errori precedenti
+        
+        // 🎯 STRATEGIA 1: Prova a caricare film in evidenza
+        try {
+          console.log('📡 Tentativo 1: Chiamata API /movies/featured');
+          const filmsFromBackend = await movieService.getFeaturedMovies();
+          setFeaturedMovies(filmsFromBackend);
+          console.log('✅ SUCCESSO: Film in evidenza caricati dal backend!');
+          
+        } catch (apiError) {
+          // 🎯 STRATEGIA 2: Se fallisce, prova a caricare tutti i film e prendi i primi 3
+          console.log('⚠️ Strategia 2: /featured fallito, provo /movies...');
+          const tuttiIFilms = await movieService.getAllMovies();
+          const primi3Films = tuttiIFilms.slice(0, 3); // Prende solo i primi 3
+          setFeaturedMovies(primi3Films);
+          console.log('✅ SUCCESSO: Primi 3 film caricati dal backend!');
+        }
+        
+      } catch (erroreCompleto) {
+        // 🚨 STRATEGIA 3: Se tutto fallisce, usa i dati di backup
+        console.error('❌ BACKEND NON DISPONIBILE:', erroreCompleto.message);
+        setError('Il server non è disponibile. Mostro dati di esempio.');
+        
+        // 🔧 FALLBACK: Usa mockMovies (dati finti salvati localmente)
+        const filmsBackup = mockMovies.slice(0, 3);
+        setFeaturedMovies(filmsBackup);
+        console.log('🔧 FALLBACK: Uso dati di backup mockMovies');
+        
+      } finally {
+        // ✅ SEMPRE: Finisce il caricamento (successo o errore)
+        setLoading(false);
+        console.log('🏁 COMPLETATO: Caricamento terminato');
+      }
+    };
+
+    // 🚀 ESEGUI la funzione di caricamento
+    caricaFilmInEvidenza();
+    
+  }, []); // Array vuoto = esegui solo una volta quando il componente si monta
 
   return (
     // Container principale con sfondo retro
@@ -68,10 +128,27 @@ export default function Home() {
             Film in Evidenza
           </h2>
           
+          {/* Stato di caricamento e indicatore */}
+          {loading && (
+            <div className="text-center mb-4">
+              <span className="text-cyan-300 font-mono-retro text-sm">
+                🔄 Caricamento dal backend...
+              </span>
+            </div>
+          )}
+          
+          {error && (
+            <div className="text-center mb-4">
+              <span className="text-yellow-400 font-mono-retro text-sm">
+                ⚠️ {error} - Usando dati locali
+              </span>
+            </div>
+          )}
+          
           {/* Griglia dei film in evidenza */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredMovies.map(movie => (
-              <MovieCard key={movie.id} movie={movie} />
+              <MovieCard key={movie._id || movie.id} movie={movie} /> 
             ))}
           </div>
           
