@@ -38,7 +38,6 @@ const checkMovies = async () => {
         console.log(`${index + 1}. ${movie.title} (${movie.year})`);
         console.log(`   ID: ${movie._id}`);
         console.log(`   Disponibile: ${movie.available || 'N/D'}`);
-        console.log('');
       });
     } else {
       console.log('❌ NESSUN FILM TROVATO nella collection movies!');
